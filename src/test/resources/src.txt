@@ -1,0 +1,3 @@
+this is resources.
+lalala
+再来一行中文。

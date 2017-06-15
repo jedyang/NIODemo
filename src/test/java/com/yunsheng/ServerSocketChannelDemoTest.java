@@ -44,11 +44,10 @@ public class ServerSocketChannelDemoTest {
         }
     }
 
+    // 测试netty
     @Test
-    public void test1(){
-        StringBuffer sb = new StringBuffer();
-        sb.append("aa");
-        System.out.println(sb.toString());
+    public void testNetty() {
+        doSend(8080, "hello 8080");
     }
 
 }

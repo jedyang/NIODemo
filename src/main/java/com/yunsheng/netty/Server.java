@@ -1,11 +1,7 @@
 package com.yunsheng.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -13,12 +9,14 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 /**
  * Created by shengyun on 17/6/1.
  */
-public class DiscardServer {
+public class Server {
     //static final boolean SSL = System.getProperty("ssl") != null;
     private int port;
+    private ChannelInboundHandlerAdapter handler;
 
-    public DiscardServer(int port) {
+    public Server(int port, ChannelInboundHandlerAdapter handler) {
         this.port = port;
+        this.handler = handler;
     }
 
     public void run() throws Exception {
@@ -50,7 +48,7 @@ public class DiscardServer {
                         //if (sslCtx != null) {
                         //    pipeline.addLast(sslCtx.newHandler(socketChannel.alloc()));
                         //}
-                        pipeline.addLast(new DiscardServerHandler());// 注册handler。是个pipline，可以add多个。
+                        pipeline.addLast(handler);// 注册handler。是个pipline，可以add多个。
                     }
                 })
                 // 设置tcp/ip连接的参数
@@ -59,12 +57,13 @@ public class DiscardServer {
 
             // 绑定监听
             ChannelFuture channelFuture = b.bind(port).sync();
+            System.out.println("tcp server started...");
 
             // 关闭之前，等待所有server socker已经关闭
             // 这样做比较优雅
             channelFuture.channel().closeFuture().sync();
 
-            System.out.println("tcp server started...");
+
         } finally {
             boss.shutdownGracefully();
             worker.shutdownGracefully();
@@ -72,17 +71,6 @@ public class DiscardServer {
 
     }
 
-    public static void main(String[] args) throws Exception {
 
-        int port = 8010;
-        if (args.length > 0) {
-            port = Integer.parseInt(args[0]);
-        }
-
-        DiscardServer discardServer = new DiscardServer(port);
-
-        discardServer.run();
-
-    }
 
 }

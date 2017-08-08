@@ -18,7 +18,9 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter {
         ByteBuf time = ctx.alloc().buffer(4);
         // 2208988800为1900年1月1日00:00:00~1970年1月1日00:00:00的总秒数
         // 不需要像原生NIO那样flip。netty有自己的实现方式。
-        time.writeInt((int)(System.currentTimeMillis() / 1000 + 2208988800L));
+        int timeSeconds = (int)(System.currentTimeMillis() / 1000 + 2208988800L);
+        System.out.println("======timeSeconds:" + timeSeconds);
+        time.writeInt(timeSeconds);
 
         final ChannelFuture f = ctx.writeAndFlush(time);
         f.addListener(new ChannelFutureListener() {

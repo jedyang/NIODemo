@@ -1,4 +1,4 @@
-package com.yunsheng.netty;
+package com.yunsheng.netty.base;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -30,8 +30,9 @@ public class Server {
         //}
 
         // server端需要两个角色
-        // boss接受请求
-        // worker负责处理。boss会将请求连接注册给某个worker
+        // boss用来接收进来的连接
+        // worker用来处理已经被接收的连接。boss会将请求连接注册给某个worker
+
         EventLoopGroup boss = new NioEventLoopGroup();
         EventLoopGroup worker = new NioEventLoopGroup();
 
@@ -60,7 +61,7 @@ public class Server {
             System.out.println("tcp server started...");
 
             // 关闭之前，等待所有server socker已经关闭
-            // 这样做比较优雅
+            // 本例子不会发生
             channelFuture.channel().closeFuture().sync();
 
 

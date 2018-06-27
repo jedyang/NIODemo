@@ -41,6 +41,7 @@ public class NIOTimeClient implements Runnable {
     public void run() {
 
         // 连接服务端
+        // 生产上，这里需要考虑重连问题
         try {
             doConnect();
         } catch (IOException e) {
@@ -65,6 +66,14 @@ public class NIOTimeClient implements Runnable {
                 e.printStackTrace();
                 System.exit(1);
             }
+
+            if (selector != null){
+                try {
+                    selector.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
     }
@@ -86,6 +95,9 @@ public class NIOTimeClient implements Runnable {
 
             if (selectionKey.isReadable()) {
                 ByteBuffer dst = ByteBuffer.allocate(1024);
+                /**
+                 * NIO的读写是异步的
+                 */
                 int read = sc.read(dst);
                 if (read > 0) {
                     dst.flip();
@@ -111,12 +123,17 @@ public class NIOTimeClient implements Runnable {
         }
     }
 
+    /**
+     * NIO的连接是异步的
+     * @throws IOException
+     */
     private void doConnect() throws IOException {
         if (socketChannel.connect(new InetSocketAddress(host, port))) {
             // 如果已经连上，注册读事件。向服务端发送请求。
             socketChannel.register(selector, SelectionKey.OP_READ);
             sendReq(socketChannel);
         } else {
+            // 还没连上，并不是连接就失败了，可能还没返回tcp握手应答
             // 注册连接事件
             socketChannel.register(selector, SelectionKey.OP_CONNECT);
         }

@@ -10,6 +10,17 @@ import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * BIO使用的是InputStream和OutputStream
+ * 在InputStream的read方法中，有这样的说明
+ * This method
+ * blocks until input data is available, the end of the stream is detected,
+ * or an exception is thrown
+ * 说明read会一直阻塞，直到有数据可读、读完、发生异常
+ *
+ * 这是BIO同步阻塞的根本原因
+ *
+ */
 public class TimeServerHandler implements Runnable {
     private Socket accept;
 

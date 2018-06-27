@@ -1,5 +1,7 @@
 package com.yunsheng;
 
+import com.yunsheng.nio.NIOFileDemo;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,10 +15,10 @@ import org.junit.Test;
 /**
  * Created by shengyun on 17/5/22.
  */
-public class NIODemoTest {
+public class NIOFileDemoTest {
 
     public static void main(String[] args){
-        String path = NIODemoTest.class.getResource("").getPath();
+        String path = NIOFileDemoTest.class.getResource("").getPath();
         System.out.println(path);
 
         // 这两种获取文件的方式，在IDE下都可以
@@ -24,7 +26,7 @@ public class NIODemoTest {
         // 下面这种路径直接拿File的会有问题
         //File f = new File("src/test/java/com/yunsheng/src.txt");
 
-        InputStream in = NIODemoTest.class.getResourceAsStream("/com/yunsheng/src.txt");
+        InputStream in = NIOFileDemoTest.class.getResourceAsStream("/com/yunsheng/src.txt");
 
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -64,7 +66,7 @@ public class NIODemoTest {
 
         String src = "src/test/resources/src.txt";
         String dest = "src/test/resources/dest.txt";
-        NIODemo.copyFile(src, dest);
+        NIOFileDemo.copyFile(src, dest);
 
     }
 }

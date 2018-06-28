@@ -11,6 +11,22 @@ public class TimeServerHandler implements Runnable{
     private AsynchronousServerSocketChannel asynchronousServerSocketChannel;
     private CountDownLatch countDownLatch;
 
+    public AsynchronousServerSocketChannel getAsynchronousServerSocketChannel() {
+        return asynchronousServerSocketChannel;
+    }
+
+    public void setAsynchronousServerSocketChannel(AsynchronousServerSocketChannel asynchronousServerSocketChannel) {
+        this.asynchronousServerSocketChannel = asynchronousServerSocketChannel;
+    }
+
+    public CountDownLatch getCountDownLatch() {
+        return countDownLatch;
+    }
+
+    public void setCountDownLatch(CountDownLatch countDownLatch) {
+        this.countDownLatch = countDownLatch;
+    }
+
     public TimeServerHandler(int port){
         this.port = port;
 
@@ -37,6 +53,7 @@ public class TimeServerHandler implements Runnable{
     }
 
     private void doAccept() {
+
         asynchronousServerSocketChannel.accept(this, new AcceptHandler());
     }
 }

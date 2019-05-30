@@ -63,9 +63,11 @@ public class Server {
             // 关闭之前，等待所有server socker已经关闭
             // 本例子不会发生
             channelFuture.channel().closeFuture().sync();
+            System.out.println("tcp server closed...");
 
 
         } finally {
+            System.out.println("finally...");
             boss.shutdownGracefully();
             worker.shutdownGracefully();
         }

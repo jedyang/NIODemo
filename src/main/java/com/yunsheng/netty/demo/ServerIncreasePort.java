@@ -1,4 +1,4 @@
-package com.yunsheng.netty;
+package com.yunsheng.netty.demo;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandlerContext;
@@ -8,13 +8,15 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 
 /**
  * @author uncleY
- * @description: Netty的简单例子
- * @date 2019/5/30 14:44
+ * @description: 演示端口绑定失败时，自增继续尝试绑定
+ * @date 2019/5/31 14:00
  */
-public class NettyServer {
+public class ServerIncreasePort {
     public static void main(String[] args) {
         ServerBootstrap serverBootstrap = new ServerBootstrap();
 
@@ -30,8 +32,6 @@ public class NettyServer {
                 // 通过channel指定IO模型为NIO
                 .channel(NioServerSocketChannel.class)
                 // 具体的读写、业务处理逻辑在handler里
-                // 注意是childHandler，是处理客户端连接后的逻辑
-                // 还有一个是handler()方法，是处理服务端启动过程中的逻辑，一般用不到
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
 
                     @Override
@@ -44,6 +44,23 @@ public class NettyServer {
                             }
                         });
                     }
-                }).bind(8000);
+                });
+
+        bindPort(serverBootstrap, 100);
+    }
+
+    // bind返回的是个ChannelFuture，可以加listener进行处理
+    private static void bindPort(ServerBootstrap serverBootstrap, int port) {
+        serverBootstrap.bind(port).addListener(new GenericFutureListener<Future<? super Void>>() {
+            @Override
+            public void operationComplete(Future<? super Void> future) throws Exception {
+                if (future.isSuccess()) {
+                    System.out.println("端口[" + port + "]绑定成功!");
+                } else {
+                    System.err.println("端口[" + port + "]绑定失败!");
+                    bindPort(serverBootstrap, port + 1);
+                }
+            }
+        });
     }
 }

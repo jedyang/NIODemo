@@ -102,9 +102,10 @@ class FirstClientHandler extends ChannelInboundHandlerAdapter {
         ByteBuf buffer = getByteBuf(ctx);
 
         // 2. 写数据
-// 貌似加不加.channel()都行，后面调用的都是pipeline.writeAndFlush(msg)
-//        ctx.channel().writeAndFlush(buffer);
-        ctx.writeAndFlush(buffer);
+        ctx.channel().writeAndFlush(buffer);
+//        ctx.writeAndFlush(msg)方法是从当前的Context, 找到上一个outbound,然后进行传播。
+// 等于这个handler后面的handler都不会被执行了
+//        ctx.writeAndFlush(buffer);
     }
 
     private ByteBuf getByteBuf(ChannelHandlerContext ctx) {

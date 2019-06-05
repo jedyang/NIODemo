@@ -10,8 +10,13 @@ import java.util.Map;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 
+import static com.yunsheng.im.protocol.command.Command.CREATE_GROUP_REQUEST;
+import static com.yunsheng.im.protocol.command.Command.CREATE_GROUP_RESPONSE;
+import static com.yunsheng.im.protocol.command.Command.JOIN_GROUP_REQUEST;
+import static com.yunsheng.im.protocol.command.Command.JOIN_GROUP_RESPONSE;
 import static com.yunsheng.im.protocol.command.Command.LOGIN_REQUEST;
 import static com.yunsheng.im.protocol.command.Command.LOGIN_RESPONSE;
+import static com.yunsheng.im.protocol.command.Command.LOGOUT_REQUEST;
 import static com.yunsheng.im.protocol.command.Command.MESSAGE_REQUEST;
 import static com.yunsheng.im.protocol.command.Command.MESSAGE_RESPONSE;
 
@@ -38,6 +43,11 @@ public class Codec {
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
         packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
         packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
+        packetTypeMap.put(LOGOUT_REQUEST, LogoutRequestPacket.class);
+        packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
+        packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
+        packetTypeMap.put(JOIN_GROUP_REQUEST, JoinGroupRequestPacket.class);
+        packetTypeMap.put(JOIN_GROUP_RESPONSE, JoinGroupResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
@@ -45,7 +55,7 @@ public class Codec {
     }
 
     // 魔数
-    private static final int MAGIC_NUMBER = 0x12345678;
+    public static final int MAGIC_NUMBER = 0x12345678;
 
     // 编码过程
     public ByteBuf encode(ByteBufAllocator alloc, Packet packet) {

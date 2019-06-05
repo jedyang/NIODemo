@@ -7,6 +7,8 @@ import static com.yunsheng.im.protocol.command.Command.MESSAGE_RESPONSE;
 @Data
 public class MessageResponsePacket extends Packet {
 
+    private String fromUserName;
+
     private String message;
 
     @Override

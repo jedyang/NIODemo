@@ -1,5 +1,7 @@
 package com.yunsheng.netty;
 
+import com.yunsheng.netty.handlers.LifeCyCleTestHandler;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
@@ -36,6 +38,7 @@ public class NettyServer {
 
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
+                        ch.pipeline().addLast(new LifeCyCleTestHandler());
                         ch.pipeline().addLast(new StringDecoder());
                         ch.pipeline().addLast(new SimpleChannelInboundHandler<String>() {
                             @Override
@@ -44,6 +47,12 @@ public class NettyServer {
                             }
                         });
                     }
-                }).bind(8000);
+                }).bind(8000).addListener(future -> {
+            if (future.isSuccess()) {
+                System.out.println("服务端启动成功");
+            } else {
+                System.out.println("服务端启动异常");
+            }
+        });
     }
 }

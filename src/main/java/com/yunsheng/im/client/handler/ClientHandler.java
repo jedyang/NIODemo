@@ -1,4 +1,4 @@
-package com.yunsheng.im.client;
+package com.yunsheng.im.client.handler;
 
 import com.yunsheng.im.protocol.command.Codec;
 import com.yunsheng.im.protocol.command.LoginRequestPacket;
@@ -7,7 +7,10 @@ import com.yunsheng.im.protocol.command.MessageResponsePacket;
 import com.yunsheng.im.protocol.command.Packet;
 import com.yunsheng.im.util.LoginUtil;
 
+import java.nio.charset.Charset;
+
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.AttributeKey;
@@ -24,16 +27,27 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("发起登录");
 
-        LoginRequestPacket packet = new LoginRequestPacket();
-        packet.setUserId(123);
-        packet.setUsername("yunsheng");
-        packet.setPassword("123456");
+        // 测试粘包拆包
+        for (int i = 0; i< 100000; i++){
+            ByteBuf byteBuf = ByteBufAllocator.DEFAULT.buffer();
+            byte[] msg = "你好，netty。记得要释放ByteBuf哦".getBytes(Charset.forName("utf-8"));
+            byteBuf.writeBytes(msg);
+            ctx.channel().writeAndFlush(byteBuf);
+        }
+        /**
+            LoginRequestPacket packet = new LoginRequestPacket();
+            packet.setUserId(123);
+            packet.setUsername("yunsheng");
+            packet.setPassword("123456");
 
-        // 编码
+            // 编码
 //        然后把 ByteBuf 分配器抽取出一个参数，这里第一个实参 ctx.alloc() 获取的就是与当前连接相关的 ByteBuf 分配器，建议这样来使用。
-        ByteBuf encode = Codec.INSTANCE.encode(ctx.alloc(), packet);
+            ByteBuf encode = Codec.INSTANCE.encode(ctx.alloc(), packet);
 
-        ctx.channel().writeAndFlush(encode);
+            ctx.channel().writeAndFlush(encode);
+        }
+         */
+
     }
 
     @Override

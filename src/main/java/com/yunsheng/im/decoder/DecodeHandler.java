@@ -1,4 +1,4 @@
-package com.yunsheng.im.handler;
+package com.yunsheng.im.decoder;
 
 import com.yunsheng.im.protocol.command.Codec;
 

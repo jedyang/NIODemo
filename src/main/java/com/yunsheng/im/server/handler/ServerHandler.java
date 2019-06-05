@@ -1,4 +1,4 @@
-package com.yunsheng.im.server;
+package com.yunsheng.im.server.handler;
 
 import com.yunsheng.im.protocol.command.Codec;
 import com.yunsheng.im.protocol.command.LoginRequestPacket;
@@ -6,6 +6,8 @@ import com.yunsheng.im.protocol.command.LoginResponsePacket;
 import com.yunsheng.im.protocol.command.MessageRequestPacket;
 import com.yunsheng.im.protocol.command.MessageResponsePacket;
 import com.yunsheng.im.protocol.command.Packet;
+
+import java.nio.charset.Charset;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -19,9 +21,11 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println("接收到客户端请求");
         ByteBuf byteBuf = (ByteBuf) msg;
 
+        System.out.println(byteBuf.toString(Charset.forName("utf-8")));
+        /*
+        System.out.println("接收到客户端请求");
         Packet decode = Codec.INSTANCE.decode(byteBuf);
 
         ByteBuf responseByteBuf;
@@ -52,5 +56,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
 
         ctx.channel().writeAndFlush(responseByteBuf);
+        */
     }
 }

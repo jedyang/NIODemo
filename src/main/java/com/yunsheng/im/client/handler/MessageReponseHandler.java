@@ -1,4 +1,4 @@
-package com.yunsheng.im.handler;
+package com.yunsheng.im.client.handler;
 
 import com.yunsheng.im.protocol.command.MessageRequestPacket;
 import com.yunsheng.im.protocol.command.MessageResponsePacket;
@@ -15,10 +15,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class MessageReponseHandler extends SimpleChannelInboundHandler<MessageResponsePacket> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageResponsePacket msg) throws Exception {
-
-        MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
-        messageResponsePacket.setMessage("服务端返回的消息");
-
-
+        System.out.println("[" + msg.getFromUserName() + "] : " + msg.getMessage());
     }
 }

@@ -30,13 +30,14 @@ public class SessionUtil {
     public static void unBindChannel(Channel channel) {
         String username = (String) channel.attr(SESSION_KEY).get();
         sessions.remove(username);
+        channel.attr(SESSION_KEY).set(null);
     }
 
-    public static void bindChannelGroup(String groupId, ChannelGroup channelGroup){
+    public static void bindChannelGroup(String groupId, ChannelGroup channelGroup) {
         channelGroupMap.put(groupId, channelGroup);
     }
 
-    public static ChannelGroup getChannelGroup(String groupId){
+    public static ChannelGroup getChannelGroup(String groupId) {
         return channelGroupMap.get(groupId);
     }
 }

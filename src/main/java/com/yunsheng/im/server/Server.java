@@ -4,6 +4,9 @@ import com.yunsheng.im.server.handler.AuthHandler;
 import com.yunsheng.im.decoder.DecodeHandler;
 import com.yunsheng.im.decoder.EncodeHandler;
 import com.yunsheng.im.server.handler.CreateGroupRequestHandler;
+import com.yunsheng.im.server.handler.ExitGroupRequestHandler;
+import com.yunsheng.im.server.handler.JoinGroupRequestHandler;
+import com.yunsheng.im.server.handler.ListGroupRequestHandler;
 import com.yunsheng.im.server.handler.LoginRequestHandler;
 import com.yunsheng.im.server.handler.MessageRequestHandler;
 
@@ -39,6 +42,9 @@ public class Server {
                         ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
                         ch.pipeline().addLast(new DecodeHandler());
                         ch.pipeline().addLast(new CreateGroupRequestHandler());
+                        ch.pipeline().addLast(new JoinGroupRequestHandler());
+                        ch.pipeline().addLast(new ExitGroupRequestHandler());
+                        ch.pipeline().addLast(new ListGroupRequestHandler());
                         ch.pipeline().addLast(new LoginRequestHandler());
                         ch.pipeline().addLast(new AuthHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());

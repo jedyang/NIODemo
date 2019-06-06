@@ -19,10 +19,12 @@ public class ConsoleCommandManager {
 
     public ConsoleCommandManager() {
         consoleCommandMap = new HashMap<>();
-//        consoleCommandMap.put("sendToUser", new SendToUserConsoleCommand());
-//        consoleCommandMap.put("logout", new LogoutConsoleCommand());
+        consoleCommandMap.put("sendToUser", new SendToUserConsoleCommand());
+        consoleCommandMap.put("logout", new LogoutConsoleCommand());
         consoleCommandMap.put("createGroup", new CreateGroupCommand());
         consoleCommandMap.put("joinGroup", new JoinGroupCommand());
+        consoleCommandMap.put("exitGroup", new ExitGroupCommand());
+        consoleCommandMap.put("listGroup", new ListGroupCommand());
     }
 
     public void exec(Scanner scanner, Channel channel){

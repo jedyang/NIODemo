@@ -1,5 +1,7 @@
 package com.yunsheng.im.server.handler;
 
+import com.yunsheng.im.protocol.command.ExitGroupRequestPacket;
+import com.yunsheng.im.protocol.command.ExitGroupResponsePacket;
 import com.yunsheng.im.protocol.command.JoinGroupRequestPacket;
 import com.yunsheng.im.protocol.command.JoinGroupResponsePacket;
 import com.yunsheng.im.util.SessionUtil;
@@ -13,25 +15,18 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 
 /**
- * @description: 加入群聊
+ * @description: 退群请求处理
  * @author uncleY
  * @date 2019/6/5 16:10
  */
-public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGroupRequestPacket> {
+public class ExitGroupRequestHandler extends SimpleChannelInboundHandler<ExitGroupRequestPacket> {
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, JoinGroupRequestPacket msg) throws Exception {
-        JoinGroupResponsePacket responsePacket = new JoinGroupResponsePacket();
+    protected void channelRead0(ChannelHandlerContext ctx, ExitGroupRequestPacket msg) throws Exception {
 
         ChannelGroup channelGroup = SessionUtil.getChannelGroup(msg.getGroupId());
 
-        if (null == channelGroup){
-            responsePacket.setResult(false);
-            responsePacket.setMsg("没有查询到该群");
-            ctx.channel().writeAndFlush(responsePacket);
-            return;
-        }
-
-        channelGroup.add(ctx.channel());
+        // 从channelGroup移除
+        channelGroup.remove(ctx.channel());
 
 
         List<String> userNamesResponse = new ArrayList<>();
@@ -40,8 +35,8 @@ public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGro
             userNamesResponse.add(userName);
         }
 
-        responsePacket.setResult(true);
-        responsePacket.setJoinedUserName((String) ctx.channel().attr(SessionUtil.SESSION_KEY).get());
+        ExitGroupResponsePacket responsePacket = new ExitGroupResponsePacket();
+        responsePacket.setExitUserName((String) ctx.channel().attr(SessionUtil.SESSION_KEY).get());
         responsePacket.setUserNames(userNamesResponse);
         responsePacket.setGroupId(msg.getGroupId());
 

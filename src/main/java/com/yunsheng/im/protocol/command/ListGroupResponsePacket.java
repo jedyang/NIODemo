@@ -4,19 +4,18 @@ import java.util.List;
 
 import lombok.Data;
 
-import static com.yunsheng.im.protocol.command.Command.JOIN_GROUP_REQUEST;
 import static com.yunsheng.im.protocol.command.Command.JOIN_GROUP_RESPONSE;
+import static com.yunsheng.im.protocol.command.Command.LIST_GROUP_RESPONSE;
 
 /**
- * @description: 加入群
+ * @description: 群成员查询
  * @author uncleY
  * @date 2019/6/5 16:05
  */
 @Data
-public class JoinGroupResponsePacket extends Packet{
+public class ListGroupResponsePacket extends Packet{
 
     private String groupId;
-    private String joinedUserName;
     private List<String> userNames;
 
     private boolean result;
@@ -24,6 +23,6 @@ public class JoinGroupResponsePacket extends Packet{
 
     @Override
     public Byte getCommand() {
-        return JOIN_GROUP_RESPONSE;
+        return LIST_GROUP_RESPONSE;
     }
 }

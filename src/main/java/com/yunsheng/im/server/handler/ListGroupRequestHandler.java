@@ -2,6 +2,8 @@ package com.yunsheng.im.server.handler;
 
 import com.yunsheng.im.protocol.command.JoinGroupRequestPacket;
 import com.yunsheng.im.protocol.command.JoinGroupResponsePacket;
+import com.yunsheng.im.protocol.command.ListGroupRequestPacket;
+import com.yunsheng.im.protocol.command.ListGroupResponsePacket;
 import com.yunsheng.im.util.SessionUtil;
 
 import java.util.ArrayList;
@@ -17,10 +19,10 @@ import io.netty.channel.group.ChannelGroup;
  * @author uncleY
  * @date 2019/6/5 16:10
  */
-public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGroupRequestPacket> {
+public class ListGroupRequestHandler extends SimpleChannelInboundHandler<ListGroupRequestPacket> {
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, JoinGroupRequestPacket msg) throws Exception {
-        JoinGroupResponsePacket responsePacket = new JoinGroupResponsePacket();
+    protected void channelRead0(ChannelHandlerContext ctx, ListGroupRequestPacket msg) throws Exception {
+        ListGroupResponsePacket responsePacket = new ListGroupResponsePacket();
 
         ChannelGroup channelGroup = SessionUtil.getChannelGroup(msg.getGroupId());
 
@@ -31,8 +33,6 @@ public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGro
             return;
         }
 
-        channelGroup.add(ctx.channel());
-
 
         List<String> userNamesResponse = new ArrayList<>();
         for (Channel channel : channelGroup) {
@@ -41,10 +41,9 @@ public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGro
         }
 
         responsePacket.setResult(true);
-        responsePacket.setJoinedUserName((String) ctx.channel().attr(SessionUtil.SESSION_KEY).get());
         responsePacket.setUserNames(userNamesResponse);
         responsePacket.setGroupId(msg.getGroupId());
 
-        channelGroup.writeAndFlush(responsePacket);
+        ctx.channel().writeAndFlush(responsePacket);
     }
 }

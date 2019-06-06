@@ -12,11 +12,16 @@ import io.netty.buffer.ByteBufAllocator;
 
 import static com.yunsheng.im.protocol.command.Command.CREATE_GROUP_REQUEST;
 import static com.yunsheng.im.protocol.command.Command.CREATE_GROUP_RESPONSE;
+import static com.yunsheng.im.protocol.command.Command.EXIT_GROUP_REQUEST;
+import static com.yunsheng.im.protocol.command.Command.EXIT_GROUP_RESPONSE;
 import static com.yunsheng.im.protocol.command.Command.JOIN_GROUP_REQUEST;
 import static com.yunsheng.im.protocol.command.Command.JOIN_GROUP_RESPONSE;
+import static com.yunsheng.im.protocol.command.Command.LIST_GROUP_REQUEST;
+import static com.yunsheng.im.protocol.command.Command.LIST_GROUP_RESPONSE;
 import static com.yunsheng.im.protocol.command.Command.LOGIN_REQUEST;
 import static com.yunsheng.im.protocol.command.Command.LOGIN_RESPONSE;
 import static com.yunsheng.im.protocol.command.Command.LOGOUT_REQUEST;
+import static com.yunsheng.im.protocol.command.Command.LOGOUT_RESPONSE;
 import static com.yunsheng.im.protocol.command.Command.MESSAGE_REQUEST;
 import static com.yunsheng.im.protocol.command.Command.MESSAGE_RESPONSE;
 
@@ -44,10 +49,15 @@ public class Codec {
         packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
         packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
         packetTypeMap.put(LOGOUT_REQUEST, LogoutRequestPacket.class);
+        packetTypeMap.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
         packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
         packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
         packetTypeMap.put(JOIN_GROUP_REQUEST, JoinGroupRequestPacket.class);
         packetTypeMap.put(JOIN_GROUP_RESPONSE, JoinGroupResponsePacket.class);
+        packetTypeMap.put(LIST_GROUP_REQUEST, ListGroupRequestPacket.class);
+        packetTypeMap.put(LIST_GROUP_RESPONSE, ListGroupResponsePacket.class);
+        packetTypeMap.put(EXIT_GROUP_RESPONSE, ExitGroupResponsePacket.class);
+        packetTypeMap.put(EXIT_GROUP_REQUEST, ExitGroupRequestPacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();

@@ -4,6 +4,10 @@ package com.yunsheng.im.client;
 import com.yunsheng.im.client.command.ConsoleCommandManager;
 import com.yunsheng.im.client.command.LoginCommand;
 import com.yunsheng.im.client.handler.CreateGroupResponseHandler;
+import com.yunsheng.im.client.handler.ExitGroupResponseHandler;
+import com.yunsheng.im.client.handler.JoinGroupResponseHandler;
+import com.yunsheng.im.client.handler.ListGroupResponseHandler;
+import com.yunsheng.im.client.handler.LogoutResponseHandler;
 import com.yunsheng.im.decoder.DecodeHandler;
 import com.yunsheng.im.decoder.EncodeHandler;
 import com.yunsheng.im.client.handler.LoginResponseHandler;
@@ -42,7 +46,11 @@ public class Client {
                         ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
                         ch.pipeline().addLast(new DecodeHandler());
                         ch.pipeline().addLast(new CreateGroupResponseHandler());
+                        ch.pipeline().addLast(new JoinGroupResponseHandler());
+                        ch.pipeline().addLast(new ExitGroupResponseHandler());
+                        ch.pipeline().addLast(new ListGroupResponseHandler());
                         ch.pipeline().addLast(new LoginResponseHandler());
+                        ch.pipeline().addLast(new LogoutResponseHandler());
                         ch.pipeline().addLast(new MessageReponseHandler());
                         ch.pipeline().addLast(new EncodeHandler());
                     }

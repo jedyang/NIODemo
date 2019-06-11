@@ -5,15 +5,18 @@ import com.yunsheng.im.client.command.ConsoleCommandManager;
 import com.yunsheng.im.client.command.LoginCommand;
 import com.yunsheng.im.client.handler.CreateGroupResponseHandler;
 import com.yunsheng.im.client.handler.ExitGroupResponseHandler;
+import com.yunsheng.im.client.handler.HeartBeatHandler;
 import com.yunsheng.im.client.handler.JoinGroupResponseHandler;
 import com.yunsheng.im.client.handler.ListGroupResponseHandler;
 import com.yunsheng.im.client.handler.LogoutResponseHandler;
+import com.yunsheng.im.client.handler.SendToGroupResponseHandler;
 import com.yunsheng.im.decoder.DecodeHandler;
 import com.yunsheng.im.decoder.EncodeHandler;
 import com.yunsheng.im.client.handler.LoginResponseHandler;
 import com.yunsheng.im.client.handler.MessageReponseHandler;
 import com.yunsheng.im.protocol.command.LoginRequestPacket;
 import com.yunsheng.im.protocol.command.MessageRequestPacket;
+import com.yunsheng.im.server.handler.IMIdleStateHandler;
 import com.yunsheng.im.util.LoginUtil;
 
 import java.util.Scanner;
@@ -42,17 +45,23 @@ public class Client {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-//                        ch.pipeline().addLast(new ClientHandler());
+                        // 空闲检测
+                        ch.pipeline().addLast(new IMIdleStateHandler());
                         ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
                         ch.pipeline().addLast(new DecodeHandler());
                         ch.pipeline().addLast(new CreateGroupResponseHandler());
                         ch.pipeline().addLast(new JoinGroupResponseHandler());
                         ch.pipeline().addLast(new ExitGroupResponseHandler());
+                        ch.pipeline().addLast(new SendToGroupResponseHandler());
                         ch.pipeline().addLast(new ListGroupResponseHandler());
                         ch.pipeline().addLast(new LoginResponseHandler());
                         ch.pipeline().addLast(new LogoutResponseHandler());
                         ch.pipeline().addLast(new MessageReponseHandler());
                         ch.pipeline().addLast(new EncodeHandler());
+                        // 心跳报文需要放在最后
+                        // 因为代码里是ctx.writeAndFlush
+                        // 所以必须放在EncodeHandler后面
+                        ch.pipeline().addLast(new HeartBeatHandler());
                     }
                 })
                 .connect("127.0.0.1", 8000)

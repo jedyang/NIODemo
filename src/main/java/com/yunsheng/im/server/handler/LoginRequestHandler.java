@@ -5,6 +5,7 @@ import com.yunsheng.im.protocol.command.LoginResponsePacket;
 import com.yunsheng.im.util.LoginUtil;
 import com.yunsheng.im.util.SessionUtil;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -14,7 +15,15 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * @author uncleY
  * @date 2019/6/2 17:00
  */
+// 加上注解标识，表明该 handler 是可以多个 channel 共享的
+@ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+
+    public static final LoginRequestHandler INSTANCE = new LoginRequestHandler();
+
+    private LoginRequestHandler() {
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket msg) throws Exception {
         // 处理登录逻辑即可，不用再判断消息类型了

@@ -1,7 +1,6 @@
 package com.yunsheng.im.protocol.command;
 
 import com.yunsheng.im.serializer.Serializer;
-import com.yunsheng.im.serializer.SerializerAlgorithm;
 import com.yunsheng.im.serializer.impl.JSONSerializer;
 
 import java.util.HashMap;
@@ -14,6 +13,8 @@ import static com.yunsheng.im.protocol.command.Command.CREATE_GROUP_REQUEST;
 import static com.yunsheng.im.protocol.command.Command.CREATE_GROUP_RESPONSE;
 import static com.yunsheng.im.protocol.command.Command.EXIT_GROUP_REQUEST;
 import static com.yunsheng.im.protocol.command.Command.EXIT_GROUP_RESPONSE;
+import static com.yunsheng.im.protocol.command.Command.HEARTBEAT_REQUEST;
+import static com.yunsheng.im.protocol.command.Command.HEARTBEAT_RESPONSE;
 import static com.yunsheng.im.protocol.command.Command.JOIN_GROUP_REQUEST;
 import static com.yunsheng.im.protocol.command.Command.JOIN_GROUP_RESPONSE;
 import static com.yunsheng.im.protocol.command.Command.LIST_GROUP_REQUEST;
@@ -24,6 +25,8 @@ import static com.yunsheng.im.protocol.command.Command.LOGOUT_REQUEST;
 import static com.yunsheng.im.protocol.command.Command.LOGOUT_RESPONSE;
 import static com.yunsheng.im.protocol.command.Command.MESSAGE_REQUEST;
 import static com.yunsheng.im.protocol.command.Command.MESSAGE_RESPONSE;
+import static com.yunsheng.im.protocol.command.Command.SEND_TO_GROUP_REQUEST;
+import static com.yunsheng.im.protocol.command.Command.SEND_TO_GROUP_RESPONSE;
 
 /**
  * @author uncleY
@@ -56,8 +59,12 @@ public class Codec {
         packetTypeMap.put(JOIN_GROUP_RESPONSE, JoinGroupResponsePacket.class);
         packetTypeMap.put(LIST_GROUP_REQUEST, ListGroupRequestPacket.class);
         packetTypeMap.put(LIST_GROUP_RESPONSE, ListGroupResponsePacket.class);
-        packetTypeMap.put(EXIT_GROUP_RESPONSE, ExitGroupResponsePacket.class);
         packetTypeMap.put(EXIT_GROUP_REQUEST, ExitGroupRequestPacket.class);
+        packetTypeMap.put(EXIT_GROUP_RESPONSE, ExitGroupResponsePacket.class);
+        packetTypeMap.put(SEND_TO_GROUP_REQUEST, SendToGroupRequestPacket.class);
+        packetTypeMap.put(SEND_TO_GROUP_RESPONSE, SendToGroupResponsePacket.class);
+        packetTypeMap.put(HEARTBEAT_REQUEST, HeartBeatRequestPacket.class);
+        packetTypeMap.put(HEARTBEAT_RESPONSE, HeartBeatResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();

@@ -27,7 +27,7 @@ public class AuthHandler extends ChannelInboundHandlerAdapter{
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("已登录，移除handler");
+        System.out.println("移除handler");
         super.handlerRemoved(ctx);
     }
 }

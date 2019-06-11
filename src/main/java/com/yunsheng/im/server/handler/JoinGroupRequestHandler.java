@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -17,7 +18,13 @@ import io.netty.channel.group.ChannelGroup;
  * @author uncleY
  * @date 2019/6/5 16:10
  */
+@ChannelHandler.Sharable
 public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGroupRequestPacket> {
+    public static final JoinGroupRequestHandler INSTANCE = new JoinGroupRequestHandler();
+
+    private JoinGroupRequestHandler() {
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, JoinGroupRequestPacket msg) throws Exception {
         JoinGroupResponsePacket responsePacket = new JoinGroupResponsePacket();

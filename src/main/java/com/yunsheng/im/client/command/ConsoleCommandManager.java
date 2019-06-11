@@ -25,6 +25,7 @@ public class ConsoleCommandManager {
         consoleCommandMap.put("joinGroup", new JoinGroupCommand());
         consoleCommandMap.put("exitGroup", new ExitGroupCommand());
         consoleCommandMap.put("listGroup", new ListGroupCommand());
+        consoleCommandMap.put("sendToGroup", new SendToGroupCommand());
     }
 
     public void exec(Scanner scanner, Channel channel){
